@@ -22,6 +22,57 @@ function readStorage(key, fallback) {
   }
 }
 
+const demoOrdersStorageKey = 'aurel-demo-orders'
+
+function saveBrowserDemoOrder(order) {
+  const orders = readStorage(demoOrdersStorageKey, [])
+  const nextOrders = [...orders.filter(item => item.id !== order.id), order]
+  localStorage.setItem(demoOrdersStorageKey, JSON.stringify(nextOrders))
+}
+
+function readBrowserDemoOrder(orderId) {
+  return readStorage(demoOrdersStorageKey, []).find(order => order.id === orderId)
+}
+
+function createBrowserDemoOrder(items) {
+  const lines = items.map(({ id, quantity }) => {
+    const product = pieces.find(piece => piece.id === id)
+    if (!product || !Number.isInteger(quantity) || quantity < 1 || quantity > 10) {
+      throw new Error('This sample bag contains an invalid product or quantity.')
+    }
+    return { id, name: product.name, quantity, unitPrice: product.price, lineTotal: product.price * quantity }
+  })
+  const order = {
+    id: `AR-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+    createdAt: new Date().toISOString(),
+    currency: 'USD',
+    items: lines,
+    total: lines.reduce((total, item) => total + item.lineTotal, 0),
+    status: 'awaiting-demo-payment',
+    payment: null,
+    paymentAttempts: [],
+  }
+  saveBrowserDemoOrder(order)
+  return order
+}
+
+async function readApiJson(response) {
+  let result
+  try {
+    result = await response.json()
+  } catch {
+    const error = new Error('The demo API is not available on this hosting preview.')
+    error.name = 'DemoApiUnavailableError'
+    throw error
+  }
+  if (!response.ok) throw new Error(result.error || 'The demo API request failed.')
+  return result
+}
+
+function isDemoApiUnavailable(error) {
+  return error instanceof TypeError || error.name === 'DemoApiUnavailableError'
+}
+
 function Icon({ name, size = 19 }) {
   const paths = {
     search: <><circle cx="10.8" cy="10.8" r="6.2" /><path d="m15.3 15.3 4.1 4.1" /></>,
@@ -384,13 +435,19 @@ function Checkout({ cart, onComplete }) {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ items: cart.map(({ id, quantity }) => ({ id, quantity })) }),
       })
-      const result = await response.json()
-      if (!response.ok) throw new Error(result.error || 'The local demo API could not create this preview.')
+      const result = await readApiJson(response)
       onComplete(result.order.id)
     } catch (requestError) {
-      setError(requestError instanceof TypeError
-        ? 'Could not reach the local demo API. Start it with “npm run api” and try again.'
-        : requestError.message || 'The local demo API could not create this preview.')
+      if (isDemoApiUnavailable(requestError)) {
+        try {
+          const order = createBrowserDemoOrder(cart.map(({ id, quantity }) => ({ id, quantity })))
+          onComplete(order.id)
+        } catch (fallbackError) {
+          setError(fallbackError.message)
+        }
+      } else {
+        setError(requestError.message || 'The local demo API could not create this preview.')
+      }
     } finally {
       setSubmitting(false)
     }
@@ -409,11 +466,19 @@ function DemoPayment({ orderId, onPaid }) {
     let active = true
     fetch(`/api/demo-orders/${encodeURIComponent(orderId)}`)
       .then(async response => {
-        const result = await response.json()
-        if (!response.ok) throw new Error(result.error || 'Could not find this demo order.')
+        const result = await readApiJson(response)
         if (active) setOrder(result.order)
       })
-      .catch(requestError => { if (active) setError(requestError.message) })
+      .catch(requestError => {
+        if (!active) return
+        if (isDemoApiUnavailable(requestError)) {
+          const localOrder = readBrowserDemoOrder(orderId)
+          if (localOrder) setOrder(localOrder)
+          else setError('This demo order was not found in the local API or this browser.')
+        } else {
+          setError(requestError.message)
+        }
+      })
     return () => { active = false }
   }, [orderId])
 
@@ -427,13 +492,39 @@ function DemoPayment({ orderId, onPaid }) {
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ method, outcome: simulation }),
       })
-      const result = await response.json()
-      if (!response.ok) throw new Error(result.error || 'Could not complete the demo payment.')
+      const result = await readApiJson(response)
       setOrder(result.order)
       setOutcome(simulation)
       if (simulation === 'approved') onPaid()
     } catch (requestError) {
-      setError(requestError instanceof TypeError ? 'Cannot reach the local demo payment API. Start it with “npm run api” and retry.' : requestError.message)
+      if (isDemoApiUnavailable(requestError)) {
+        const localOrder = readBrowserDemoOrder(orderId)
+        if (!localOrder) {
+          setError('The demo order is unavailable in the local API and this browser.')
+        } else if (localOrder.status === 'demo-paid') {
+          setOrder(localOrder)
+          setError('This demo order is already approved.')
+        } else {
+          const payment = {
+            id: `DEMO-${Math.random().toString(36).slice(2, 10).toUpperCase()}`,
+            method,
+            status: simulation,
+            simulatedAt: new Date().toISOString(),
+          }
+          const updatedOrder = {
+            ...localOrder,
+            status: simulation === 'approved' ? 'demo-paid' : 'awaiting-demo-payment',
+            payment,
+            paymentAttempts: [...(localOrder.paymentAttempts || []), payment],
+          }
+          saveBrowserDemoOrder(updatedOrder)
+          setOrder(updatedOrder)
+          setOutcome(simulation)
+          if (simulation === 'approved') onPaid()
+        }
+      } else {
+        setError(requestError.message)
+      }
     } finally {
       setBusy(false)
     }
@@ -463,11 +554,19 @@ function OrderConfirmation({ orderId }) {
     let active = true
     fetch(`/api/demo-orders/${encodeURIComponent(orderId)}`)
       .then(async response => {
-        const result = await response.json()
-        if (!response.ok) throw new Error(result.error || 'Could not load this demo order.')
+        const result = await readApiJson(response)
         if (active) setOrder(result.order)
       })
-      .catch(requestError => { if (active) setError(requestError.message) })
+      .catch(requestError => {
+        if (!active) return
+        if (isDemoApiUnavailable(requestError)) {
+          const localOrder = readBrowserDemoOrder(orderId)
+          if (localOrder) setOrder(localOrder)
+          else setError('This demo order was not found in the local API or this browser.')
+        } else {
+          setError(requestError.message)
+        }
+      })
     return () => { active = false }
   }, [orderId])
   return <main className="page-width"><section className="success-page"><p className="eyebrow">Demo flow complete · no real order</p><h1>{order ? 'Thank you.' : 'Your demo order'}</h1>{error ? <p role="alert">{error}</p> : order ? <><p>Reference <strong>{order.id}</strong> · status <strong>{order.status}</strong></p>{order.payment && <p>Simulated {order.payment.method === 'demo-card' ? 'card' : 'wallet'} outcome: {order.payment.status}. No money was charged.</p>}<p>No order, payment, or personal information was sent. Demo orders are saved only in the local development data file.</p></> : <p>Loading your local demo order…</p>}<Link to="shop" className="button">Continue exploring</Link></section></main>

@@ -37,4 +37,8 @@ Vite prints the local preview URL when the development server starts. To check t
 
 Product photography is loaded from Unsplash and fonts from Google Fonts, so those assets require an internet connection.
 
-The local API is a development demo, not a production commerce backend. Orders persist in `data/demo-orders.json` on this device and are excluded from version control. This file is not protected production storage; do not enter real or sensitive information. There is no database, authentication, inventory reservation, real payment processing, customer-data storage, or fulfilment. Do not use it for live orders.
+The local API is a development demo, not a production commerce backend. Orders persist in `data/demo-orders.json` on this device and are excluded from version control and preview deployments. If the static preview has no API, the demo checkout stores its illustrative order only in the current browser. Neither mode is protected production storage; do not enter real or sensitive information. There is no database, authentication, inventory reservation, real payment processing, customer-data storage, or fulfilment. Do not use it for live orders.
+
+## Temporary web preview
+
+This project can be deployed as a static temporary Vercel preview with `npx vercel deploy --temporary --yes`. The preview supports browsing and browser-local simulated checkout. Its local Node API is not deployed with the static site, and the temporary URL is not a permanent production deployment.
