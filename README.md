@@ -1,212 +1,130 @@
+# AUREL — Jewellery Storefront ✨
 
-AUREL
-Jewellery, considered.
+AUREL is a modern jewellery storefront designed to showcase elegant, timeless jewellery through a clean, premium, and user-friendly shopping experience.
 
-Considered jewellery, made to be kept. Fine gold and thoughtfully chosen stones.
+🔗 **Live Demo:** https://aurel-jewellery-storefront.vercel.app/
 
-Live Demo · Report a Bug · Request a Feature
+## 📖 About the Project
 
-Show Image Show Image Show Image Show Image
+AUREL is a jewellery e-commerce website concept focused on minimalist aesthetics, elegant product presentation, and a seamless browsing experience. The project combines a luxury-inspired visual identity with a modern storefront layout.
 
-</div>
-Table of Contents
-About the Project
-Live Demo
-Screenshots
-Features
-Design Principles
-Tech Stack
-Project Structure
-Getting Started
-Available Scripts
-Environment Variables
-Deployment
-SEO & Performance
-Accessibility
-Browser Support
-Roadmap
-Contributing
-License
-Contact
-About the Project
+## ✨ Features
 
-AUREL is a jewellery storefront for a brand built on one idea: pieces made to be kept. The experience is calm, minimal and editorial. It lets fine gold and carefully chosen stones take centre stage, without visual noise or pressure.
+* **Elegant UI/UX** — A clean, modern design inspired by premium jewellery brands.
+* **Product Showcase** — Present jewellery pieces with product imagery and details.
+* **Category-Based Browsing** — Organize jewellery into collections and categories.
+* **Responsive Design** — Designed to provide a consistent experience across screen sizes.
+* **Modern Storefront** — A visually engaging shopping interface.
+* **Deployed Website** — Hosted on Vercel for easy access.
 
-The goal of this project is to deliver a fast, elegant and responsive shopping front end that feels as considered as the jewellery it presents.
+*Note: Confirm which features are implemented in your current codebase before publishing this list.*
 
-Live Demo
+## 🛠️ Tech Stack
 
-https://aurel-jewellery-storefront.vercel.app/
+Update this section to match the technologies used in your project.
 
-Screenshots
-<!-- Add screenshots to a /docs or /screenshots folder, then uncomment: --> <!-- | Home | Collection | Product | | ---- | ---------- | ------- | | ![Home](./screenshots/home.png) | ![Collection](./screenshots/collection.png) | ![Product](./screenshots/product.png) | -->
+* **Frontend:** React / Next.js
+* **Styling:** CSS / Tailwind CSS
+* **Language:** JavaScript / TypeScript
+* **Deployment:** Vercel
+* **Version Control:** Git & GitHub
 
-Screenshots coming soon.
+## 🚀 Getting Started
 
-Features
-Editorial storefront: a refined home page that presents the brand and featured pieces
-Collection browsing: explore jewellery by category or collection
-Product pages: large imagery, materials, stones and care details
-Shopping cart: add, remove and review items
-Fully responsive: designed for mobile, tablet and desktop
-Fast by default: optimised assets and edge delivery via Vercel
-SEO-ready: descriptive title, meta description and theme colour
-Clean, extendable code: easy to maintain and add to
+Follow these steps to run the project locally.
 
-Keep only the features that are actually implemented in your build.
+### Prerequisites
 
-Design Principles
-Principle	Description
-Considered	Every element earns its place. Nothing is decorative for its own sake.
-Quiet luxury	Warm neutral palette (
-#f8f7f4 theme colour), generous whitespace, refined typography.
-Product first	Imagery and detail lead. The interface stays out of the way.
-Mobile first	Layouts are designed for small screens first, then scaled up.
-Tech Stack
-Layer	Technology
-Frontend	HTML5, CSS3, JavaScript (replace with your framework, e.g. React / Next.js / Vite)
-Styling	CSS (replace with Tailwind / CSS Modules / Sass if used)
-Hosting	Vercel
-Version control	Git & GitHub
-Project Structure
-text
-aurel-jewellery-storefront/
-├── public/              # Static assets: images, fonts, favicon
-├── src/
-│   ├── components/      # Reusable UI components (header, footer, product card)
-│   ├── pages/           # Pages / routes
-│   ├── data/            # Product and collection data
-│   ├── styles/          # Global styles and design tokens
-│   └── utils/           # Helper functions
-├── .gitignore
-├── package.json
-├── LICENSE
-└── README.md
+Make sure you have installed:
 
-Update this tree to match your actual repository.
+* Node.js
+* npm (or your preferred package manager)
+* Git
 
-Getting Started
-Prerequisites
-Node.js v18 or later
-npm, yarn or pnpm
-Git
-Installation
-bash
-# 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/aurel-jewellery-storefront.git
+### Installation
 
-# 2. Navigate into the project
-cd aurel-jewellery-storefront
+**1. Clone the repository**
 
-# 3. Install dependencies
+```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+```
+
+**2. Navigate to the project directory**
+
+```bash
+cd YOUR_REPOSITORY
+```
+
+**3. Install dependencies**
+
+```bash
 npm install
+```
 
-# 4. Start the development server
+**4. Start the development server**
+
+```bash
 npm run dev
+```
 
-Open the address shown in your terminal, typically http://localhost:3000 or http://localhost:5173.
+**5. Open in your browser**
 
-Available Scripts
-Command	Description
-npm run dev	Start the development server with hot reload
-npm run build	Create an optimised production build
-npm run start	Serve the production build locally
-npm run lint	Check code for lint errors
+Visit the local URL shown in your terminal, typically:
 
-Match these to the scripts in your package.json.
+```text
+http://localhost:3000
+```
 
-Environment Variables
+## 📁 Project Structure
 
-Create a .env.local file in the project root if your build needs configuration:
+The exact structure depends on your implementation. A typical React or Next.js project may look like this:
 
-env
-# Public site URL
-NEXT_PUBLIC_SITE_URL=https://aurel-jewellery-storefront.vercel.app
+```text
+aurel-jewellery-storefront/
+├── public/          # Static assets and images
+├── src/             # Application source code
+│   ├── components/  # Reusable UI components
+│   ├── app/         # Application routes (if using Next.js)
+│   └── styles/      # Stylesheets
+├── package.json     # Dependencies and scripts
+├── README.md        # Project documentation
+└── ...
+```
 
-# Payment / analytics keys (only if used)
-# STRIPE_PUBLIC_KEY=
-# ANALYTICS_ID=
+## 🌐 Live Deployment
 
-Never commit .env files or secret keys. Make sure .env* is listed in .gitignore.
+Explore the deployed website:
 
-Deployment
+**https://aurel-jewellery-storefront.vercel.app/**
 
-The project is deployed on Vercel.
+The project is hosted on Vercel.
 
-Deploy your own copy
-Fork or push this repository to your GitHub account.
-Go to vercel.com/new and import the repository.
-Add any required environment variables.
-Click Deploy.
+## 🔮 Future Improvements
 
-Every push to the main branch triggers an automatic production deployment, and pull requests receive preview URLs.
+* Add advanced product filtering and sorting.
+* Implement shopping cart and checkout functionality.
+* Add product search and wishlist features.
+* Integrate secure payment processing.
+* Connect a product database and backend API.
+* Improve accessibility and performance.
+* Add customer accounts and order tracking.
 
-SEO & Performance
-Descriptive page title: AUREL — Jewellery, considered
-Meta description for search engines and social previews
-Theme colour (
-#f8f7f4) for mobile browser chrome
-Responsive viewport configuration
-Global CDN delivery through Vercel
+## 🤝 Contributing
 
-Suggested improvements: Open Graph and Twitter card images, sitemap.xml, robots.txt, structured data (Product schema) and image optimisation (WebP/AVIF, lazy loading).
+Contributions and suggestions are welcome.
 
-Accessibility
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Push the branch to your fork.
+5. Open a pull request.
 
-The project aims to follow WCAG 2.1 AA practices:
+## 📄 License
 
-Sufficient colour contrast
-Semantic HTML landmarks and headings
-Descriptive alt text for product images
-Keyboard-friendly navigation and visible focus states
-Browser Support
-Browser	Support
-Chrome (latest)	✅
-Firefox (latest)	✅
-Safari (latest)	✅
-Edge (latest)	✅
-Mobile Safari / Chrome	✅
-Roadmap
- Responsive storefront
- Deployment on Vercel
- Product search and filters (metal, stone, price)
- Wishlist
- Secure checkout and payments
- Customer accounts and order history
- Ring size guide and jewellery care guide
- Newsletter sign-up
- Multi-currency support
- Open Graph / social share images
+This project is available for learning and portfolio purposes. Add a license file to specify the terms under which others may use, modify, and distribute the code.
 
-See the open issues for a full list of proposed features and known problems.
+---
 
-Contributing
-
-Contributions make open source great. Any contribution you make is appreciated.
-
-Fork the project
-Create your feature branch: git checkout -b feature/amazing-feature
-Commit your changes: git commit -m "Add amazing feature"
-Push to the branch: git push origin feature/amazing-feature
-Open a pull request
-
-Please keep pull requests focused and follow the existing code style.
-
-License
-
-Distributed under the MIT License. See LICENSE for more information.
-
-Contact
-
-Your Name
-
-GitHub: @YOUR_USERNAME
-Email: your.email@example.com
-
-Project link: https://github.com/YOUR_USERNAME/aurel-jewellery-storefront
-
-<div align="center">
-
-Crafted with care · AUREL
-
-</div>
+<p align="center">
+  Crafted with care for AUREL ✨
+</p>
